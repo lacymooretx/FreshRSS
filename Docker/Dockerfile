@@ -4,7 +4,10 @@ ENV TZ=UTC
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
+# Aspendora: change CACHE_BUST (deploy/build.sh passes the date) so a rebuild always re-runs apt and picks up the latest Debian security fixes (PHP, Apache, OpenSSL).
+ARG CACHE_BUST=0
+RUN echo "cache-bust ${CACHE_BUST}" && apt-get update && \
+	apt-get upgrade -y && \
 	apt-get install --no-install-recommends -y \
 	ca-certificates cron \
 	apache2 libapache2-mod-php \
@@ -27,7 +30,7 @@ LABEL \
 	org.opencontainers.image.documentation="https://freshrss.github.io/FreshRSS/" \
 	org.opencontainers.image.licenses="AGPL-3.0" \
 	org.opencontainers.image.revision="${SOURCE_COMMIT}" \
-	org.opencontainers.image.source="https://github.com/FreshRSS/FreshRSS" \
+	org.opencontainers.image.source="https://github.com/lacymooretx/FreshRSS" \
 	org.opencontainers.image.title="FreshRSS" \
 	org.opencontainers.image.url="https://freshrss.org/" \
 	org.opencontainers.image.vendor="FreshRSS" \
