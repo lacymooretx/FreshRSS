@@ -6,7 +6,7 @@ set -eu
 SRC=/opt/services/freshrss/src
 if [ -d "$SRC/.git" ]; then git -C "$SRC" fetch -q origin && git -C "$SRC" checkout -q aspendora && git -C "$SRC" reset -q --hard origin/aspendora
 else git clone -q -b aspendora https://github.com/lacymooretx/FreshRSS.git "$SRC"; fi
-VER=$(sed -n "s/.*FRESHRSS_VERSION', '\([^']*\)'.*/\1/p" "$SRC/constants.php")
+VER=$(sed -n "s/^const FRESHRSS_VERSION = '\([^']*\)'.*/\1/p" "$SRC/constants.php")
 TAG="aspendora/freshrss:${VER}-$(date +%Y%m%d)"
 docker build --pull -f "$SRC/Docker/Dockerfile" \
   --build-arg CACHE_BUST="$(date +%s)" \
